@@ -1,7 +1,7 @@
 {
-    "name": "gsplat",
+    "name": "time-splatting",
     "version": "1.2.4",
-    "description": "JavaScript Gaussian Splatting library",
+    "description": "JavaScript time splatting library, forked from gsplat.js",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "type": "module",
@@ -15,7 +15,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dylanebert/splat.js.git"
+        "url": "git+https://github.com/pocket-timelapse/time-splatting.js.git"
     },
     "keywords": [
         "gsplat",
@@ -24,12 +24,8 @@
         "3d",
         "webgl"
     ],
-    "author": "dylanebert",
+    "author": "echen01",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/dylanebert/splat.js/issues"
-    },
-    "homepage": "https://github.com/dylanebert/splat.js#readme",
     "devDependencies": {
         "@jest/globals": "^29.7.0",
         "@rollup/plugin-commonjs": "^25.0.7",
@@ -50,6 +46,7 @@
         "rollup": "^4.3.0",
         "rollup-plugin-web-worker-loader": "^1.6.1",
         "ts-jest": "^29.1.1",
+        "tslib": "^2.8.1",
         "typescript": "^5.2.2"
     },
     "files": [
