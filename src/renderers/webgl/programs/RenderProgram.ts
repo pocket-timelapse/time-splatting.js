@@ -7,7 +7,7 @@ import { Color32 } from "../../../math/Color32";
 import { ObjectAddedEvent, ObjectChangedEvent, ObjectRemovedEvent } from "../../../events/Events";
 import { Splat } from "../../../splats/Splat";
 import { WebGLRenderer } from "../../WebGLRenderer";
-import { Scene } from "../../../core/Scene"
+import { Scene } from "../../../core/Scene";
 
 const vertexShaderSource = /* glsl */ `#version 300 es
 precision highp float;
@@ -162,6 +162,7 @@ class RenderProgram extends ShaderProgram {
     private _renderData: RenderData | null = null;
     private _depthIndex: Uint32Array = new Uint32Array();
     private _splatTexture: WebGLTexture | null = null;
+    private _outputTexture: WebGLTexture | null = null;
     private _worker: Worker | null = null;
 
     protected _initialize: () => void;
@@ -540,6 +541,10 @@ class RenderProgram extends ShaderProgram {
 
     get splatTexture() {
         return this._splatTexture;
+    }
+
+    get outputTexture() {
+        return this._outputTexture;
     }
 
     get outlineThickness() {

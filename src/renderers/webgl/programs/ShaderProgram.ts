@@ -130,6 +130,7 @@ abstract class ShaderProgram {
     }
 
     protected abstract _getVertexSource(): string;
+
     protected abstract _getFragmentSource(): string;
 }
 

@@ -11,12 +11,14 @@ export class WebGLRenderer {
     private _gl: WebGL2RenderingContext;
     private _backgroundColor: Color32 = new Color32();
     private _renderProgram: RenderProgram;
+    private _programs: ShaderProgram[];
 
     addProgram: (program: ShaderProgram) => void;
     removeProgram: (program: ShaderProgram) => void;
     resize: () => void;
     setSize: (width: number, height: number) => void;
     render: (scene: Scene, camera: Camera) => void;
+    render_intrinsic: (albedo_scene: Scene, shading_scene: Scene, camera: Camera) => void;
     dispose: () => void;
 
     constructor(optionalCanvas: HTMLCanvasElement | null = null, optionalRenderPasses: ShaderPass[] | null = null) {
@@ -41,7 +43,7 @@ export class WebGLRenderer {
         }
 
         this._renderProgram = new RenderProgram(this, renderPasses);
-        const programs = [this._renderProgram] as ShaderProgram[];
+        this._programs = [this._renderProgram] as ShaderProgram[];
 
         this.resize = () => {
             const width = canvas.clientWidth;
@@ -55,33 +57,39 @@ export class WebGLRenderer {
             canvas.width = width;
             canvas.height = height;
             this._gl.viewport(0, 0, canvas.width, canvas.height);
-            for (const program of programs) {
+            for (const program of this._programs) {
                 program.resize();
             }
         };
 
         this.render = (scene: Scene, camera: Camera) => {
-            for (const program of programs) {
+            for (const program of this._programs) {
                 program.render(scene, camera);
             }
         };
 
+        this.render_intrinsic = (albedo_scene: Scene, shading_scene: Scene, camera: Camera) => {
+            this._programs[0].render(albedo_scene, camera);
+            this._programs[1].render(shading_scene, camera);
+            this._programs[2].render(albedo_scene, camera);
+        };
+
         this.dispose = () => {
-            for (const program of programs) {
+            for (const program of this._programs) {
                 program.dispose();
             }
         };
 
         this.addProgram = (program: ShaderProgram) => {
-            programs.push(program);
+            this._programs.push(program);
         };
 
         this.removeProgram = (program: ShaderProgram) => {
-            const index = programs.indexOf(program);
+            const index = this._programs.indexOf(program);
             if (index < 0) {
                 throw new Error("Program not found");
             }
-            programs.splice(index, 1);
+            this._programs.splice(index, 1);
         };
 
         this.resize();
@@ -97,6 +105,14 @@ export class WebGLRenderer {
 
     get renderProgram() {
         return this._renderProgram;
+    }
+
+    get albedoProgram() {
+        return this._programs[0] as RenderProgram;
+    }
+
+    get shadingProgram() {
+        return this._programs[1] as RenderProgram;
     }
 
     get backgroundColor() {
